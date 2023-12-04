@@ -3,6 +3,7 @@
 #else
 #include <unistd.h>
 #endif
+
 #include <cstdlib>
 #include <iostream>
 #include <vector>
@@ -24,6 +25,7 @@ void selectionSort(vector<int>& arr) {
         }
     }
 }
+
 void bubbleSort(vector<int>& arr) {
     int n = arr.size();
     bool swapped;
@@ -88,42 +90,104 @@ void mergeSort(vector<int>& arr, int start, int end, vector<int>& temp) {
     merge(arr, start, middle, end, temp);
 }
 
-void partition(vector<int>& D, int low, int high) {
-    if (high <= low) return;
+int partition(vector<int>& arr, int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
 
-    int i = low;
-    int j = high;
-    int s = D[low];
-
-    while (high > low) {
-        while (high > low && D[high] >= s) {
-            high--;
-        }
-        if (high > low) {
-            D[low] = D[high];
-            low++;
-        }
-        while (high > low && D[low] <= s) {
-            low++;
-        }
-        if (high > low) {
-            D[high] = D[low];
-            high--;
+    for (int j = low; j < high; ++j) {
+        if (arr[j] < pivot) {
+            ++i;
+            swap(arr[i], arr[j]);
         }
     }
-    D[low] = s;
-    partition(D, i, low - 1);
-    partition(D, low + 1, j);
+
+    swap(arr[i + 1], arr[high]);
+    return i + 1;
+}
+void quicksort(vector<int>& D, int low, int high) {
+    if (low < high) {
+        int pi = partition(D, low, high);
+        quicksort(D, low, pi - 1);
+        quicksort(D, pi + 1, high);
+    }
 }
 
-void quicksort(vector<int>& D) {
-    partition(D, 0, D.size() - 1);
+void heapify(vector<int>& arr, int n, int i) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left < n && arr[left] > arr[largest]) {
+        largest = left;
+    }
+
+    if (right < n && arr[right] > arr[largest]) {
+        largest = right;
+    }
+
+    if (largest != i) {
+        swap(arr[i], arr[largest]);
+        heapify(arr, n, largest);
+    }
+}
+
+void heapSort(vector<int>& arr) {
+    int n = arr.size();
+
+    for (int i = n / 2 - 1; i >= 0; --i) {
+        heapify(arr, n, i);
+    }
+
+    for (int i = n - 1; i > 0; --i) {
+        swap(arr[0], arr[i]);
+        heapify(arr, i, 0);
+    }
+}
+
+double calculateTime(vector<int>& arr, int option) {
+    auto start = chrono::high_resolution_clock::now();
+
+    switch (option) {
+        case 1: {
+            selectionSort(arr);
+            break;
+        }
+        case 2: {
+            bubbleSort(arr);
+            break;
+        }
+        case 3: {
+            insertionSort(arr);
+            break;
+        }
+        case 4: {
+            mergeSort(arr, 0, arr.size(), arr);
+            break;
+        }
+        case 5: {
+            quicksort(arr, 0, arr.size() - 1);
+            break;
+        }
+        case 6: {
+            heapSort(arr);
+            break;
+        }
+        default: {
+            cout << "Opción inválida" << endl;
+            return 0.0;
+        }
+    }
+
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> elapsed_seconds = end - start;
+
+    return elapsed_seconds.count();
 }
 
 int main() {
     srand(time(0));
 
-    int tamanoArreglo = 20000; // Definir tamaño del arreglo
+    int tamanoArreglo = 100000; // Definir tamaño del arreglo
 
     set<int> elementosAleatorios; // Usar un conjunto para evitar duplicados
     vector<int> arregloAleatorio;
@@ -140,37 +204,40 @@ int main() {
         arregloCopia.push_back(num);
     }
 
-    clock_t startSelection = clock();
-    selectionSort(arregloAleatorio);
-    clock_t endSelection = clock();
-    double tiempoSelection = double(endSelection - startSelection) / CLOCKS_PER_SEC;
+    sort(arregloCopia.begin(), arregloCopia.end()); // Ordenar para tener duplicados
 
-    clock_t startBubble = clock();
-    bubbleSort(arregloAleatorio);
-    clock_t endBubble = clock();
-    double tiempoBubble = double(endBubble - startBubble) / CLOCKS_PER_SEC;
+    vector<int> arrAscendente(tamanoArreglo); // Datos ordenados de forma ascendente
+    iota(arrAscendente.begin(), arrAscendente.end(), 1);
 
-    clock_t startInsertion = clock();
-    insertionSort(arregloAleatorio);
-    clock_t endInsertion = clock();
-    double tiempoInsertion = double(endInsertion - startInsertion) / CLOCKS_PER_SEC;
+    vector<int> arrDescendente = arrAscendente; // Datos ordenados de forma descendente
+    reverse(arrDescendente.begin(), arrDescendente.end());
 
-    clock_t startMerge = clock();
-    mergeSort(arregloAleatorio, 0, arregloAleatorio.size(), temp);
-    clock_t endMerge = clock();
-    double tiempoMerge = double(endMerge - startMerge) / CLOCKS_PER_SEC;
+    vector<vector<int>> datasets = {
+        arregloAleatorio, arregloCopia, arrAscendente, arrDescendente
+    };
 
-    clock_t startQuick = clock();
-    quicksort(arregloAleatorio);
-    clock_t endQuick = clock();
-    double tiempoQuick = double(endQuick - startQuick) / CLOCKS_PER_SEC;
+    vector<string> datasetNames = {
+        "Aleatorio sin duplicados", "Aleatorio con duplicados", "Ascendente", "Descendente"
+    };
 
-    cout << "Ordenamiento de forma aleatoria sin repeticiones:" << endl;
-    cout << "Selection Sort: " << tiempoSelection << " segundos" << endl;
-    cout << "Bubble Sort: " << tiempoBubble << " segundos" << endl;
-    cout << "Insertion Sort: " << tiempoInsertion << " segundos" << endl;
-    cout << "Merge Sort: " << tiempoMerge << " segundos" << endl;
-    cout << "Quick Sort: " << tiempoQuick << " segundos" << endl;
+    vector<string> algorithmNames = {
+        "Selection Sort", "Bubble Sort", "Insertion Sort", "Merge Sort", "Quick Sort", "Heap Sort"
+    };
+
+    cout << "Carreras de algoritmos" << endl;
+    cout << "Modos de ordenamiento:" << endl;
+    cout << "1. Aleatorio sin duplicados" << endl;
+    cout << "2. Aleatorio con duplicados" << endl;
+    cout << "3. Ascendente" << endl;
+    cout << "4. Descendente" << endl;
+
+    for (int i = 0; i < datasets.size(); ++i) {
+        cout << "\n" << "Resultados para " << datasetNames[i] << ":" << endl;
+        for (int j = 0; j < algorithmNames.size(); ++j) {
+            double time_taken = calculateTime(datasets[i], j + 1);
+            cout << algorithmNames[j] << ": " << fixed << time_taken << setprecision(5) << " segundos" << endl;
+        }
+    }
 
     return 0;
 }
