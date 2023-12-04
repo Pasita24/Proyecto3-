@@ -2,6 +2,7 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <algorithm>
 
 using namespace std;
 
@@ -160,85 +161,108 @@ void heapSort(vector<int>& arr) {
         heapify(arr, i, 0);
     }
 }
+void generateRandomArrayNoRepeats(vector<int>& arr, int size) {
+    arr.resize(size);
+    for (int i = 0; i < size; ++i) {
+        arr[i] = i + 1;
+    }
+    random_shuffle(arr.begin(), arr.end());
+}
 
+void generateRandomArrayWithRepeats(vector<int>& arr, int size) {
+    arr.resize(size);
+    for (int i = 0; i < size; ++i) {
+        arr[i] = rand() % size; // Puedes ajustar el rango si es necesario
+    }
+}
+void applySortingAlgorithms(vector<int>& arr, int size) {
+    vector<int> arr_selection = arr;
+    vector<int> arr_bubble = arr;
+    vector<int> arr_insertion = arr;
+    vector<int> arr_shell = arr;
+    vector<int> arr_merge = arr;
+    vector<int> arr_quick = arr;
+    vector<int> arr_heap = arr;
+
+    clock_t start, end;
+    double duration;
+
+    // Selection Sort
+    start = clock();
+    selectionSort(arr_selection);
+    end = clock();
+    duration = double(end - start) / CLOCKS_PER_SEC;
+    cout << "Tiempo de ejecucion de Selection Sort: " << duration << " segundos" << endl;
+
+    // Bubble Sort
+    start = clock();
+    bubbleSort(arr_bubble);
+    end = clock();
+    duration = double(end - start) / CLOCKS_PER_SEC;
+    cout << "Tiempo de ejecucion de Bubble Sort: " << duration << " segundos" << endl;
+
+    // Insertion Sort
+    start = clock();
+    insertionSort(arr_insertion);
+    end = clock();
+    duration = double(end - start) / CLOCKS_PER_SEC;
+    cout << "Tiempo de ejecucion de Insertion Sort: " << duration << " segundos" << endl;
+
+    // Shell Sort
+    start = clock();
+    shellSort(arr_shell);
+    end = clock();
+    duration = double(end - start) / CLOCKS_PER_SEC;
+    cout << "Tiempo de ejecucion de Shell Sort: " << duration << " segundos" << endl;
+
+    // Merge Sort
+    start = clock();
+    mergeSort(arr_merge, 0, size - 1);
+    end = clock();
+    duration = double(end - start) / CLOCKS_PER_SEC;
+    cout << "Tiempo de ejecucion de Merge Sort: " << duration << " segundos" << endl;
+
+    // Quick Sort
+    start = clock();
+    quickSort(arr_quick, 0, size - 1);
+    end = clock();
+    duration = double(end - start) / CLOCKS_PER_SEC;
+    cout << "Tiempo de ejecucion de Quick Sort: " << duration << " segundos" << endl;
+
+    // Heap Sort
+    start = clock();
+    heapSort(arr_heap);
+    end = clock();
+    duration = double(end - start) / CLOCKS_PER_SEC;
+    cout << "Tiempo de ejecucion de Heap Sort: " << duration << " segundos" << endl;
+}
 int main() {
     srand(time(0)); // Semilla para números aleatorios
 
+    int choice;
+    cout << "Seleccione el tipo de arreglo a ordenar:" << endl;
+    cout << "1. Arreglo sin numeros repetidos" << endl;
+    cout << "2. Arreglo con numeros repetidos" << endl;
+    cout << "Ingrese su elección: ";
+    cin >> choice;
+
     int size = rand() % 10001 + 100000; // Tamaño entre 100,000 y 110,000
-    vector<int> arr_selection(size), arr_bubble(size), arr_insertion(size), arr_shell(size), arr_merge(size), arr_quick(size), arr_heap(size);
+    vector<int> random_array;
 
-
-    // Generar números únicos para cada algoritmo
-    for (int i = 0; i < size; ++i) {
-        arr_selection[i] = i + 1;
-        arr_bubble[i] = i + 1;
-        arr_insertion[i] = i + 1;
+    if (choice == 1) {
+        generateRandomArrayNoRepeats(random_array, size);
+    } else if (choice == 2) {
+        generateRandomArrayWithRepeats(random_array, size);
+    } else {
+        cout << "Elección invalida. Saliendo del programa." << endl;
+        return 1;
     }
 
-    // Barajar los arreglos para obtener números aleatorios
-    for (int i = size - 1; i > 0; i--) {
-        int j = rand() % (i + 1);
-        swap(arr_selection[i], arr_selection[j]);
-        swap(arr_bubble[i], arr_bubble[j]);
-        swap(arr_insertion[i], arr_insertion[j]);
-    }
+    cout << "Aplicando algoritmos de ordenamiento al arreglo generado..." << endl;
 
-    // Calcular el tiempo de ejecución de Selection Sort
-    clock_t start_selection = clock();
-    selectionSort(arr_selection);
-    clock_t end_selection = clock();
-    double duration_selection = double(end_selection - start_selection) / CLOCKS_PER_SEC; // Convertir a segundos
+    // Llamar a la función para aplicar los algoritmos de ordenamiento
+    applySortingAlgorithms(random_array, size);
 
-    cout << "Tiempo de ejecucion de Selection Sort para un arreglo de tamanio " << size << ": " << duration_selection << " segundos" << endl;
-
-    // Calcular el tiempo de ejecución de Bubble Sort
-    clock_t start_bubble = clock();
-    bubbleSort(arr_bubble);
-    clock_t end_bubble = clock();
-    double duration_bubble = double(end_bubble - start_bubble) / CLOCKS_PER_SEC; // Convertir a segundos
-
-    cout << "Tiempo de ejecucion de Bubble Sort para un arreglo de tamanio " << size << ": " << duration_bubble << " segundos" << endl;
-
-    // Calcular el tiempo de ejecución de Insertion Sort
-    clock_t start_insertion = clock();
-    insertionSort(arr_insertion);
-    clock_t end_insertion = clock();
-    double duration_insertion = double(end_insertion - start_insertion) / CLOCKS_PER_SEC; // Convertir a segundos
-
-    cout << "Tiempo de ejecucion de Insertion Sort para un arreglo de tamanio " << size << ": " << duration_insertion << " segundos" << endl;
-
-    // Calcular el tiempo de ejecución de Shell Sort
-    clock_t start_shell = clock();
-    shellSort(arr_shell);
-    clock_t end_shell = clock();
-    double duration_shell = double(end_shell - start_shell) / CLOCKS_PER_SEC; // Convertir a segundos
-
-    cout << "Tiempo de ejecucion de Shell Sort para un arreglo de tamanio " << size << ": " << duration_shell << " segundos" << endl;
-
-    // Calcular el tiempo de ejecución de Merge Sort
-    clock_t start_merge = clock();
-    mergeSort(arr_merge, 0, size - 1);
-    clock_t end_merge = clock();
-    double duration_merge = double(end_merge - start_merge) / CLOCKS_PER_SEC; // Convertir a segundos
-
-    cout << "Tiempo de ejecucion de Merge Sort para un arreglo de tamanio " << size << ": " << duration_merge << " segundos" << endl;
-
-
-    // Calcular el tiempo de ejecución de Quick Sort
-    clock_t start_quick = clock();
-    quickSort(arr_quick, 0, size - 1);
-    clock_t end_quick = clock();
-    double duration_quick = double(end_quick - start_quick) / CLOCKS_PER_SEC; // Convertir a segundos
-
-    cout << "Tiempo de ejecucion de Quick Sort para un arreglo de tamanio " << size << ": " << duration_quick << " segundos" << endl;
-
-    // Calcular el tiempo de ejecución de Heap Sort
-    clock_t start_heap = clock();
-    heapSort(arr_heap);
-    clock_t end_heap = clock();
-    double duration_heap = double(end_heap - start_heap) / CLOCKS_PER_SEC; // Convertir a segundos
-
-    cout << "Tiempo de ejecucion de Heap Sort para un arreglo de tamanio " << size << ": " << duration_heap << " segundos" << endl;
-
+    
     return 0;
 }
