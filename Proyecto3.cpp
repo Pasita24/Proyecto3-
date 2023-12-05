@@ -161,6 +161,165 @@ void heapSort(vector<int>& arr) {
         heapify(arr, i, 0);
     }
 }
+//<--------------------------------------------- Algoritmos Inversos---------------------------->
+void selectionSortReverse(vector<int>& arr) {
+    int n = arr.size();
+    for (int i = 0; i < n - 1; i++) {
+        int maxIdx = i;
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] > arr[maxIdx]) {
+                maxIdx = j;
+            }
+        }
+        swap(arr[i], arr[maxIdx]);
+    }
+}
+
+void bubbleSortReverse(vector<int>& arr) {
+    int n = arr.size();
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] < arr[j + 1]) {
+                swap(arr[j], arr[j + 1]);
+            }
+        }
+    }
+}
+
+void insertionSortReverse(vector<int>& arr) {
+    int n = arr.size();
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j] < key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+void shellSortReverse(vector<int>& arr) {
+    int n = arr.size();
+    for (int gap = n / 2; gap > 0; gap /= 2) {
+        for (int i = gap; i < n; ++i) {
+            int temp = arr[i];
+            int j;
+            for (j = i; j >= gap && arr[j - gap] < temp; j -= gap) {
+                arr[j] = arr[j - gap];
+            }
+            arr[j] = temp;
+        }
+    }
+}
+
+void mergeReverse(vector<int>& arr, int low, int mid, int high) {
+    int n1 = mid - low + 1;
+    int n2 = high - mid;
+
+    vector<int> left(n1), right(n2);
+
+    for (int i = 0; i < n1; ++i) {
+        left[i] = arr[low + i];
+    }
+
+    for (int j = 0; j < n2; ++j) {
+        right[j] = arr[mid + 1 + j];
+    }
+
+    int i = 0, j = 0, k = low;
+
+    while (i < n1 && j < n2) {
+        if (left[i] >= right[j]) {
+            arr[k] = left[i];
+            ++i;
+        } else {
+            arr[k] = right[j];
+            ++j;
+        }
+        ++k;
+    }
+
+    while (i < n1) {
+        arr[k] = left[i];
+        ++i;
+        ++k;
+    }
+
+    while (j < n2) {
+        arr[k] = right[j];
+        ++j;
+        ++k;
+    }
+}
+
+void mergeSortReverse(vector<int>& arr, int low, int high) {
+    if (low < high) {
+        int mid = low + (high - low) / 2;
+        mergeSortReverse(arr, low, mid);
+        mergeSortReverse(arr, mid + 1, high);
+        mergeReverse(arr, low, mid, high);
+    }
+}
+
+int partitionReverse(vector<int>& arr, int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; ++j) {
+        if (arr[j] > pivot) {
+            ++i;
+            swap(arr[i], arr[j]);
+        }
+    }
+
+    swap(arr[i + 1], arr[high]);
+    return i + 1;
+}
+
+void quickSortReverse(vector<int>& arr, int low, int high) {
+    if (low < high) {
+        int pi = partitionReverse(arr, low, high);
+        quickSortReverse(arr, low, pi - 1);
+        quickSortReverse(arr, pi + 1, high);
+    }
+}
+
+void heapifyReverse(vector<int>& arr, int n, int i) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left < n && arr[left] > arr[largest]) {
+        largest = left;
+    }
+
+    if (right < n && arr[right] > arr[largest]) {
+        largest = right;
+    }
+
+    if (largest != i) {
+        swap(arr[i], arr[largest]);
+        heapifyReverse(arr, n, largest);
+    }
+}
+
+void heapSortReverse(vector<int>& arr) {
+    int n = arr.size();
+
+    // Construir el heap
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        heapifyReverse(arr, n, i);
+    }
+
+    // Extraer elementos uno por uno del heap
+    for (int i = n - 1; i >= 0; i--) {
+        swap(arr[0], arr[i]);
+        heapifyReverse(arr, i, 0);
+    }
+}
+//<--------------------------------------- Fin --------------------------->
+
 void generateRandomArrayNoRepeats(vector<int>& arr, int size) {
     arr.resize(size);
     for (int i = 0; i < size; ++i) {
@@ -192,49 +351,110 @@ void applySortingAlgorithms(vector<int>& arr, int size) {
     selectionSort(arr_selection);
     end = clock();
     duration = double(end - start) / CLOCKS_PER_SEC;
-    cout << "Tiempo de ejecucion de Selection Sort: " << duration << " segundos" << endl;
+    cout << "Tiempo de ejecucion de Selection Sort(tamanio: "<< size <<"):" << duration << " segundos" << endl;
 
     // Bubble Sort
     start = clock();
     bubbleSort(arr_bubble);
     end = clock();
     duration = double(end - start) / CLOCKS_PER_SEC;
-    cout << "Tiempo de ejecucion de Bubble Sort: " << duration << " segundos" << endl;
+    cout << "Tiempo de ejecucion de Bubble Sort(tamanio: "<< size <<"):"<<duration << " segundos" << endl;
 
     // Insertion Sort
     start = clock();
     insertionSort(arr_insertion);
     end = clock();
     duration = double(end - start) / CLOCKS_PER_SEC;
-    cout << "Tiempo de ejecucion de Insertion Sort: " << duration << " segundos" << endl;
+    cout << "Tiempo de ejecucion de Insertion Sort(tamanio: "<< size <<"):" << duration << " segundos" << endl;
 
     // Shell Sort
     start = clock();
     shellSort(arr_shell);
     end = clock();
     duration = double(end - start) / CLOCKS_PER_SEC;
-    cout << "Tiempo de ejecucion de Shell Sort: " << duration << " segundos" << endl;
+    cout << "Tiempo de ejecucion de Shell Sort(tamanio: "<< size <<"):" << duration << " segundos" << endl;
 
     // Merge Sort
     start = clock();
     mergeSort(arr_merge, 0, size - 1);
     end = clock();
     duration = double(end - start) / CLOCKS_PER_SEC;
-    cout << "Tiempo de ejecucion de Merge Sort: " << duration << " segundos" << endl;
+    cout << "Tiempo de ejecucion de Merge Sort(tamanio: "<< size <<"):" << duration << " segundos" << endl;
 
     // Quick Sort
     start = clock();
     quickSort(arr_quick, 0, size - 1);
     end = clock();
     duration = double(end - start) / CLOCKS_PER_SEC;
-    cout << "Tiempo de ejecucion de Quick Sort: " << duration << " segundos" << endl;
+    cout << "Tiempo de ejecucion de Quick Sort(tamanio: "<< size <<"):" << duration << " segundos" << endl;
 
     // Heap Sort
     start = clock();
     heapSort(arr_heap);
     end = clock();
     duration = double(end - start) / CLOCKS_PER_SEC;
-    cout << "Tiempo de ejecucion de Heap Sort: " << duration << " segundos" << endl;
+    cout << "Tiempo de ejecucion de Heap Sort(tamanio: "<< size <<"):" << duration << " segundos" << endl;
+}
+void applyReverseSortingAlgorithms(vector<int>& arr, int size) {
+    vector<int> arr_selection = arr;
+    vector<int> arr_bubble = arr;
+    vector<int> arr_insertion = arr;
+    vector<int> arr_shell = arr;
+    vector<int> arr_merge = arr;
+    vector<int> arr_quick = arr;
+    vector<int> arr_heap = arr;
+
+    clock_t start, end;
+    double duration;
+
+    // Selection Sort in reverse order
+    start = clock();
+    selectionSortReverse(arr_selection);
+    end = clock();
+    duration = double(end - start) / CLOCKS_PER_SEC;
+    cout << "Tiempo de ejecucion de Selection Sort (Mayor a menor)(tamanio: "<< size <<"):"<< duration << " segundos" << endl;
+
+    // Bubble Sort in reverse order
+    start = clock();
+    bubbleSortReverse(arr_bubble);
+    end = clock();
+    duration = double(end - start) / CLOCKS_PER_SEC;
+    cout << "Tiempo de ejecucion de Bubble Sort (Mayor a menor)(tamanio: "<< size <<"):"<< duration << " segundos" << endl;
+
+    // Insertion Sort in reverse order
+    start = clock();
+    insertionSortReverse(arr_insertion);
+    end = clock();
+    duration = double(end - start) / CLOCKS_PER_SEC;
+    cout << "Tiempo de ejecucion de Insertion Sort (Mayor a menor)(tamanio: "<< size <<"):" << duration << " segundos" << endl;
+
+    // Shell Sort in reverse order
+    start = clock();
+    shellSortReverse(arr_shell);
+    end = clock();
+    duration = double(end - start) / CLOCKS_PER_SEC;
+    cout << "Tiempo de ejecucion de Shell Sort (Mayor a menor)(tamanio: "<< size <<"):" << duration << " segundos" << endl;
+
+    // Merge Sort in reverse order
+    start = clock();
+    mergeSortReverse(arr_merge, 0, size - 1);
+    end = clock();
+    duration = double(end - start) / CLOCKS_PER_SEC;
+    cout << "Tiempo de ejecucion de Merge Sort (Mayor a menor)(tamanio: "<< size <<"):" << duration << " segundos" << endl;
+
+    // Quick Sort in reverse order
+    start = clock();
+    quickSortReverse(arr_quick, 0, size - 1);
+    end = clock();
+    duration = double(end - start) / CLOCKS_PER_SEC;
+    cout << "Tiempo de ejecucion de Quick Sort (Mayor a menor)(tamanio: "<< size <<"):" << duration << " segundos" << endl;
+
+    // Heap Sort in reverse order
+    start = clock();
+    heapSortReverse(arr_heap);
+    end = clock();
+    duration = double(end - start) / CLOCKS_PER_SEC;
+    cout << "Tiempo de ejecucion de Heap Sort (Mayor a menor)(tamanio: "<< size <<"):" << duration << " segundos" << endl;
 }
 int main() {
     srand(time(0)); // Semilla para números aleatorios
@@ -243,7 +463,9 @@ int main() {
     cout << "Seleccione el tipo de arreglo a ordenar:" << endl;
     cout << "1. Arreglo sin numeros repetidos" << endl;
     cout << "2. Arreglo con numeros repetidos" << endl;
-    cout << "Ingrese su elección: ";
+    cout << "3. Arreglo ordenado" << endl;
+    cout << "4. Arreglo ordenado inversamente " << endl;
+    cout << "Ingrese su eleccion: ";
     cin >> choice;
 
     int size = rand() % 10001 + 100000; // Tamaño entre 100,000 y 110,000
@@ -253,6 +475,17 @@ int main() {
         generateRandomArrayNoRepeats(random_array, size);
     } else if (choice == 2) {
         generateRandomArrayWithRepeats(random_array, size);
+    }
+    else if(choice ==3){
+         for (int i = 0; i < size; ++i) {
+            random_array.push_back(rand() % 10001 + 100000);
+        }
+    } else if (choice == 4) {
+        for (int i = 0; i < size; ++i) {
+            random_array.push_back(rand() % 10001 + 100000);
+        }
+        applyReverseSortingAlgorithms(random_array, size);
+        return 0;    
     } else {
         cout << "Elección invalida. Saliendo del programa." << endl;
         return 1;
@@ -262,7 +495,7 @@ int main() {
 
     // Llamar a la función para aplicar los algoritmos de ordenamiento
     applySortingAlgorithms(random_array, size);
-
+ 
     
     return 0;
 }
