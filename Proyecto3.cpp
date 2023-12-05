@@ -456,46 +456,116 @@ void applyReverseSortingAlgorithms(vector<int>& arr, int size) {
     duration = double(end - start) / CLOCKS_PER_SEC;
     cout << "Tiempo de ejecucion de Heap Sort (Mayor a menor)(tamanio: "<< size <<"):" << duration << " segundos" << endl;
 }
+void raceSortingAlgorithms() {
+    vector<string> algorithms = {
+        "Selection Sort",
+        "Bubble Sort",
+        "Insertion Sort",
+        "Shell Sort",
+        "Merge Sort",
+        "Quick Sort",
+        "Heap Sort"
+    };
+
+    vector<string> raceTypes = {
+        "Arreglo sin numeros repetidos",
+        "Arreglo con numeros repetidos",
+        "Arreglo ordenado",
+        "Arreglo ordenado inversamente"
+    };
+
+    for (int i = 0; i < raceTypes.size(); ++i) {
+        cout << "Carrera " << i + 1 << ": " << raceTypes[i] << endl;
+
+        int size = rand() % 10001 + 100000; // Tamaño entre 100,000 y 110,000
+        vector<int> random_array;
+
+        // Generar el arreglo según el tipo de carrera
+        if (i == 0) {
+            generateRandomArrayNoRepeats(random_array, size);
+        } else if (i == 1) {
+            generateRandomArrayWithRepeats(random_array, size);
+        } else if (i == 2) {
+            for (int i = 0; i < size; ++i) {
+                random_array.push_back(rand() % 10001 + 100000);
+            }
+            sort(random_array.begin(), random_array.end());
+        } else if (i == 3) {
+            for (int i = 0; i < size; ++i) {
+                random_array.push_back(rand() % 10001 + 100000);
+            }
+            sort(random_array.rbegin(), random_array.rend());
+        }
+
+        vector<double> execution_times(algorithms.size(), 0.0);
+
+        random_shuffle(algorithms.begin(), algorithms.end());
+
+        for (int j = 0; j < algorithms.size(); ++j) {
+            vector<int> arr = random_array;
+
+            clock_t start, end;
+            double duration;
+
+            start = clock();
+
+            // Aplicar el algoritmo de ordenamiento
+            if (algorithms[j] == "Selection Sort") {
+                selectionSort(arr);
+            } else if (algorithms[j] == "Bubble Sort") {
+                bubbleSort(arr);
+            } else if (algorithms[j] == "Insertion Sort") {
+                insertionSort(arr);
+            } else if (algorithms[j] == "Shell Sort") {
+                shellSort(arr);
+            } else if (algorithms[j] == "Merge Sort") {
+                mergeSort(arr, 0, size - 1);
+            } else if (algorithms[j] == "Quick Sort") {
+                quickSort(arr, 0, size - 1);
+            } else if (algorithms[j] == "Heap Sort") {
+                heapSort(arr);
+            }
+
+            end = clock();
+            duration = double(end - start) / CLOCKS_PER_SEC;
+
+            cout << j + 1 << ". " << algorithms[j] << ", Tamanio: " << size << ", Tipo: " << raceTypes[i] << ", Tiempo: " << duration << " segundos" << endl;
+
+            // Almacenar el tiempo de ejecución del algoritmo
+            execution_times[j] += duration;
+        }
+
+        // Encontrar el ganador de la carrera
+        double min_time = execution_times[0];
+        int winner_index = 0;
+        for (int j = 1; j < execution_times.size(); ++j) {
+            if (execution_times[j] < min_time) {
+                min_time = execution_times[j];
+                winner_index = j;
+            }
+        }
+
+        cout << "El ganador de la carrera (" << raceTypes[i] << " )es: " << algorithms[winner_index] << " con un tiempo de " << min_time << " segundos" << endl;
+    }
+}
 int main() {
     srand(time(0)); // Semilla para números aleatorios
 
-    int choice;
-    cout << "Seleccione el tipo de arreglo a ordenar:" << endl;
-    cout << "1. Arreglo sin numeros repetidos" << endl;
-    cout << "2. Arreglo con numeros repetidos" << endl;
-    cout << "3. Arreglo ordenado" << endl;
-    cout << "4. Arreglo ordenado inversamente " << endl;
+    cout << "Nuestro menu principal va a ser:" << endl;
+    cout << "1.- Cola de espera" << endl;
+    cout << "2.- Trazabilidad de objetos" << endl;
+    cout << "3.- Eventos de cada escenario" << endl;
+
+    int option;
     cout << "Ingrese su eleccion: ";
-    cin >> choice;
+    cin >> option;
 
-    int size = rand() % 10001 + 100000; // Tamaño entre 100,000 y 110,000
-    vector<int> random_array;
-
-    if (choice == 1) {
-        generateRandomArrayNoRepeats(random_array, size);
-    } else if (choice == 2) {
-        generateRandomArrayWithRepeats(random_array, size);
-    }
-    else if(choice ==3){
-         for (int i = 0; i < size; ++i) {
-            random_array.push_back(rand() % 10001 + 100000);
-        }
-    } else if (choice == 4) {
-        for (int i = 0; i < size; ++i) {
-            random_array.push_back(rand() % 10001 + 100000);
-        }
-        applyReverseSortingAlgorithms(random_array, size);
-        return 0;    
+    if (option == 1) {
+        raceSortingAlgorithms();
     } else {
-        cout << "Elección invalida. Saliendo del programa." << endl;
+        cout << "Opcion invalida. Saliendo del programa." << endl;
         return 1;
     }
 
-    cout << "Aplicando algoritmos de ordenamiento al arreglo generado..." << endl;
-
-    // Llamar a la función para aplicar los algoritmos de ordenamiento
-    applySortingAlgorithms(random_array, size);
- 
-    
     return 0;
 }
