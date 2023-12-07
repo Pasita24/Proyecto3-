@@ -359,25 +359,38 @@ void applySortingAlgorithm(vector<int>& arr, string algorithm) {
     }
 }
 // Funciones para generar arreglos para cada tipo de carrera y ordenamiento
+void generateRandomArrayNoRepeatsInRange(vector<int>& arr, int size) {
+    arr.resize(size);
+    for (int i = 0; i < size; ++i) {
+        arr[i] = rand() % size + 1;
+    }
+    random_shuffle(arr.begin(), arr.end());
+}
 
+void generateRandomArrayWithRepeatsInRange(vector<int>& arr, int size) {
+    arr.resize(size);
+    for (int i = 0; i < size; ++i) {
+        arr[i] = rand() % size + 1;
+    }
+}
 void generateRandomArrayNoRepeatsMultiplied(vector<int>& arr, int size) {
     arr.resize(size);
     for (int i = 0; i < size; ++i) {
-        arr[i] = (rand() % 501 + 1000) * 15; // Genera números entre 1000 y 1500 y los multiplica por 15
+        arr[i] = (rand() % 501 + 1001) * 15; 
     }
 }
 
 void generateRandomArrayWithRepeatsMultiplied(vector<int>& arr, int size) {
     arr.resize(size);
     for (int i = 0; i < size; ++i) {
-        arr[i] = (rand() % 501) * 15; // Genera números entre 0 y 500 y los multiplica por 15
+         arr[i] = (rand() % 502 + 1000) * 15;
     }
 }
 
 void generateSortedArrayMultiplied(vector<int>& arr, int size) {
     arr.resize(size);
     for (int i = 0; i < size; ++i) {
-        arr[i] = (rand() % 501 + 1000) * 15;
+        arr[i] = (rand() % 501 + 1001) * 15;
     }
     sort(arr.begin(), arr.end());
 }
@@ -385,7 +398,7 @@ void generateSortedArrayMultiplied(vector<int>& arr, int size) {
 void generateReverseSortedArrayMultiplied(vector<int>& arr, int size) {
     arr.resize(size);
     for (int i = 0; i < size; ++i) {
-        arr[i] = (rand() % 501 + 1000) * 15;
+        arr[i] = (rand() % 501 + 1001) * 15;
     }
     sort(arr.rbegin(), arr.rend());
 }
@@ -473,7 +486,7 @@ void raceSortingAlgorithms() {
             }
         }
 
-        cout << "El ganador de la carrera (" << raceTypes[i] << " )es: " << algorithms[winner_index] << " con un tiempo de " << min_time << " segundos" << endl;
+        cout << "---------------> El ganador de la carrera (" << raceTypes[i] << " )es: " << algorithms[winner_index] << " con un tiempo de " << min_time << " segundos <------------" << endl;
     }
 }
 void raceSortingAlgorithms2() {
@@ -498,7 +511,7 @@ void raceSortingAlgorithms2() {
     for (int i = 0; i < raceTypes.size(); ++i) {
         cout << "Carrera " << i + 1 << ": " << raceTypes[i] << endl;
 
-        int size = rand() % (1001 + 1500)*15; // Tamaño entre 1000 y 1500
+        int size = (rand() % 501 + 1001)*15; // Tamaño entre 1000 y 1500
         vector<int> random_array_multiplied;
 
         // Generar el arreglo según el tipo de carrera
@@ -546,7 +559,70 @@ void raceSortingAlgorithms2() {
             }
         }
 
-        cout << "El ganador de la carrera (" << raceTypes[i] << " )es: " << algorithms[winner_index] << " con un tiempo de " << min_time << " segundos" << endl;
+        cout << "---------------> El ganador de la carrera (" << raceTypes[i] << " )es: " << algorithms[winner_index] << " con un tiempo de " << min_time << " segundos <------------" << endl;
+    }
+}
+void raceSortingAlgorithms3() {
+    vector<string> algorithms = {
+        "Selection Sort",
+        "Bubble Sort",
+        "Insertion Sort",
+        "Shell Sort",
+        "Merge Sort",
+        "Quick Sort",
+        "Heap Sort"
+    };
+
+    vector<string> raceTypes = {
+        "Arreglo sin numeros repetidos",
+        "Arreglo con numeros repetidos"
+    };
+
+    for (int i = 0; i < raceTypes.size(); ++i) {
+        cout << "Carrera " << i + 1 << ": " << raceTypes[i] << endl;
+
+        int size = rand() % 20001 + 60000; // Tamaño entre 60,000 y 80,000
+        vector<int> random_array;
+
+        // Generar el arreglo según el tipo de carrera
+        if (i == 0) {
+            generateRandomArrayNoRepeatsInRange(random_array, size);
+        } else if (i == 1) {
+            generateRandomArrayWithRepeatsInRange(random_array, size);
+        }
+
+        vector<double> execution_times(algorithms.size(), 0.0);
+
+        random_shuffle(algorithms.begin(), algorithms.end());
+
+        for (int j = 0; j < algorithms.size(); ++j) {
+            vector<int> arr = random_array;
+
+            clock_t start, end;
+            double duration;
+
+            start = clock();
+
+            applySortingAlgorithm(arr, algorithms[j]);
+
+            end = clock();
+            duration = double(end - start) / CLOCKS_PER_SEC;
+
+            cout << j + 1 << ". " << algorithms[j] << ", Tamanio: " << size << ", Tipo: " << raceTypes[i] << ", Tiempo: " << duration << " segundos" << endl;
+
+            execution_times[j] += duration;
+        }
+
+        double min_time = execution_times[0];
+        int winner_index = 0;
+        for (int j = 1; j < execution_times.size(); ++j) {
+            if (execution_times[j] < min_time) {
+                min_time = execution_times[j];
+                winner_index = j;
+            }
+        }
+
+        cout << "-----------> El ganador de la carrera (" << raceTypes[i] << " )es: " << algorithms[winner_index] << " con un tiempo de " << min_time << " segundos <----------------" << endl;
     }
 }
 int main() {
@@ -565,7 +641,9 @@ int main() {
         raceSortingAlgorithms();
     } else if (option == 2) {
         raceSortingAlgorithms2();
-    } else {
+    } else if (option == 3) {
+        raceSortingAlgorithms3(); 
+    }else {
         cout << "Opcion invalida. Saliendo del programa." << endl;
         return 1;
     }
