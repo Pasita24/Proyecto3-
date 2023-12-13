@@ -12,7 +12,7 @@
 - Heap Sort
 
 ## Funcionalidades 
-- 
+- El programa presenta al usuario un menú con 3 opciones:
 1. Cola de espera
 2. Trazabilidad de objetos 
 3. Eventos de cada escenario 

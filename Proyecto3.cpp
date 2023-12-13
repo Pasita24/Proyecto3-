@@ -6,6 +6,7 @@
 using namespace std;
 
     // Funciones de ordenamiento optimizadas
+// <--------------- Funciones de algoritmos de ordenamiento -------------------------->
 void selectionSort(vector<int>& arr) {
     int n = arr.size();
     for (int i = 0; i < n - 1; i++) {
@@ -167,7 +168,7 @@ void heapSort(vector<int>& arr) {
         }
 }
 
-
+// <--------------- Fin de las Funciones de algoritmos de ordenamiento -------------------------->
 void generateRandomArrayNoRepeats(vector<int>& arr, int size) {
         arr.resize(size);
         for (int i = 0; i < size; ++i) {
@@ -199,7 +200,8 @@ void applySortingAlgorithm(vector<int>& arr, string algorithm) {
             heapSort(arr);
         }
 }
-    // Funciones para generar arreglos para cada tipo de carrera y ordenamiento
+// Funciones para generar arreglos para cada tipo de carrera y ordenamiento
+//<------------------------- Generacion de arreglos 
 void generateRandomArrayNoRepeatsInRange(vector<int>& arr, int size) {
         arr.resize(size);
         for (int i = 0; i < size; ++i) {
@@ -257,6 +259,8 @@ void generateReverseSortedArray(vector<int>& arr, int size) {
         }
         sort(arr.rbegin(), arr.rend());
 }
+//<--------------- Fin de la generacion de arreglos ----------------->
+//<-------------------------- Funciones para las 3 carreras ------------------->
 void raceSortingAlgorithms() {
         // Vector de algoritmos
         vector<string> algorithms = {
@@ -477,6 +481,7 @@ void raceSortingAlgorithms3() {
         cout << "-----------> El ganador de la carrera (" << raceTypes[i] << " )es: " << algorithms[winner_index] << " con un tiempo de " << min_time << " segundos <----------------" << endl;
     }
 }
+//<-------------------------- Fin de las Funciones para las 3 carreras ------------------->
 int main() {
     srand(time(0)); // Semilla para números aleatorios
 
