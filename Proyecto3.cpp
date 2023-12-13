@@ -112,8 +112,7 @@ void mergeSort(vector<int>& arr, int low, int high) {
             merge(arr, low, mid, high);
         }
 }
-
-    int partition(vector<int>& arr, int low, int high) {
+int partition(vector<int>& arr, int low, int high) {
         int pivot = arr[high];
         int i = low - 1;
 
