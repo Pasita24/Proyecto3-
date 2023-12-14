@@ -169,20 +169,7 @@ void heapSort(vector<int>& arr) {
 }
 
 // <--------------- Fin de las Funciones de algoritmos de ordenamiento -------------------------->
-void generateRandomArrayNoRepeats(vector<int>& arr, int size) {
-        arr.resize(size);
-        for (int i = 0; i < size; ++i) {
-            arr[i] = i + 1;
-        }
-        random_shuffle(arr.begin(), arr.end());
-}
 
-void generateRandomArrayWithRepeats(vector<int>& arr, int size) {
-        arr.resize(size);
-        for (int i = 0; i < size; ++i) {
-            arr[i] = rand() % size; // Puedes ajustar el rango si es necesario
-        }
-}
 void applySortingAlgorithm(vector<int>& arr, string algorithm) {
         if (algorithm == "Selection Sort") {
             selectionSort(arr);
@@ -202,20 +189,37 @@ void applySortingAlgorithm(vector<int>& arr, string algorithm) {
 }
 // Funciones para generar arreglos para cada tipo de carrera y ordenamiento
 //<------------------------- Generacion de arreglos 
-void generateRandomArrayNoRepeatsInRange(vector<int>& arr, int size) {
+//<--------------Carrera 1--------------->
+    // Funciones para generar arreglos ordenados e inversos
+void generateRandomArrayNoRepeats(vector<int>& arr, int size) {
         arr.resize(size);
         for (int i = 0; i < size; ++i) {
-            arr[i] = rand() % size + 1;
+            arr[i] = i + 1;
         }
         random_shuffle(arr.begin(), arr.end());
 }
 
-void generateRandomArrayWithRepeatsInRange(vector<int>& arr, int size) {
+void generateRandomArrayWithRepeats(vector<int>& arr, int size) {
         arr.resize(size);
         for (int i = 0; i < size; ++i) {
-            arr[i] = rand() % size + 1;
+            arr[i] = rand() % size; // Puedes ajustar el rango si es necesario
         }
 }
+void generateSortedArray(vector<int>& arr, int size) {
+        for (int i = 0; i < size; ++i) {
+            arr.push_back(rand() % 10001 + 100000);
+        }
+        sort(arr.begin(), arr.end());
+}
+
+void generateReverseSortedArray(vector<int>& arr, int size) {
+        for (int i = 0; i < size; ++i) {
+            arr.push_back(rand() % 10001 + 100000);
+        }
+        sort(arr.rbegin(), arr.rend());
+}
+//<--------------- Fin arreglos carrera 1 ----------------->
+//<--------------Carrera 2--------------->
 void generateRandomArrayNoRepeatsMultiplied(vector<int>& arr, int size) {
         arr.resize(size);
         for (int i = 0; i < size; ++i) {
@@ -245,19 +249,35 @@ void generateReverseSortedArrayMultiplied(vector<int>& arr, int size) {
         }
         sort(arr.rbegin(), arr.rend());
 }
-    // Funciones para generar arreglos ordenados e inversos
-void generateSortedArray(vector<int>& arr, int size) {
+//<-----------------Fin carrera 2 ---------------------->
+//<--------------Carrera 3--------------->
+void generateSortedArrayMultiplied2(vector<int>& arr, int size) {
+        arr.resize(size);
         for (int i = 0; i < size; ++i) {
-            arr.push_back(rand() % 10001 + 100000);
+            arr[i] = rand() % 20001 + 60000;
         }
         sort(arr.begin(), arr.end());
 }
-
-void generateReverseSortedArray(vector<int>& arr, int size) {
+void generateReverseSortedArrayMultiplied2(vector<int>& arr, int size) {
+        arr.resize(size);
         for (int i = 0; i < size; ++i) {
-            arr.push_back(rand() % 10001 + 100000);
+            arr[i] = rand() % 20001 + 60000;
         }
         sort(arr.rbegin(), arr.rend());
+}
+void generateRandomArrayNoRepeatsInRange(vector<int>& arr, int size) {
+        arr.resize(size);
+        for (int i = 0; i < size; ++i) {
+            arr[i] = rand() % size + 1;
+        }
+        random_shuffle(arr.begin(), arr.end());
+}
+
+void generateRandomArrayWithRepeatsInRange(vector<int>& arr, int size) {
+        arr.resize(size);
+        for (int i = 0; i < size; ++i) {
+            arr[i] = rand() % size + 1;
+        }
 }
 //<--------------- Fin de la generacion de arreglos ----------------->
 //<-------------------------- Funciones para las 3 carreras ------------------->
@@ -297,7 +317,9 @@ void raceSortingAlgorithms() {
             } else if (i == 3) {
                 generateReverseSortedArray(random_array, size);
             }
-
+            
+            // Mostrar el tamaño del arreglo generado
+            cout << "Tamanio del arreglo generado: " << random_array.size() << endl;
             vector<double> execution_times(algorithms.size(), 0.0);
 
             random_shuffle(algorithms.begin(), algorithms.end());
@@ -372,7 +394,8 @@ vector<string> raceTypes = {
         } else if (i == 3) {
             generateReverseSortedArrayMultiplied(random_array_multiplied, size);
         }
-
+        // Mostrar el tamaño del arreglo generado
+            cout << "Tamanio del arreglo generado: " << random_array_multiplied.size() << endl;
         vector<double> execution_times(algorithms.size(), 0.0);
 
         random_shuffle(algorithms.begin(), algorithms.end());
@@ -441,11 +464,14 @@ void raceSortingAlgorithms3() {
                 generateRandomArrayNoRepeatsInRange(random_array, size);
             } else if (i == 1) {
                 generateRandomArrayWithRepeatsInRange(random_array, size);
-            } else if (i == 2) {
-                generateSortedArrayMultiplied(random_array, size);
+            } if (i == 2) {
+                 generateSortedArrayMultiplied2(random_array, size);
             } else if (i == 3) {
-                generateReverseSortedArrayMultiplied(random_array, size);
+                generateReverseSortedArrayMultiplied2(random_array, size);
             }
+
+            // Mostrar el tamaño del arreglo generado
+            cout << "Tamanio del arreglo generado: " << random_array.size() << endl;
 
             vector<double> execution_times(algorithms.size(), 0.0);
 
