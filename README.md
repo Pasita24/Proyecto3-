@@ -57,7 +57,10 @@ El tamaño de los arreglos varía según el tipo de competencia. Se utilizan dif
 1. Numeros aleatorio sin repeticion 
 2. Numeros aleatorio con repeticion 
 3. Ordenado
-4. Inversamente Ordenado 
+4. Inversamente Ordenado
+# Link a Youtube
+- https://youtu.be/6_V2BngxncI
+- Recomendacion personal verlo a x1.25
 
 
 
