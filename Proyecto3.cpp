@@ -180,7 +180,7 @@ void applySortingAlgorithm(vector<int>& arr, string algorithm) {
         } else if (algorithm == "Shell Sort") {
             shellSort(arr);
         } else if (algorithm == "Merge Sort") {
-            mergeSort(arr, 0, arr.size() - 1);
+            mergeSort(arr,  0, arr.size() - 1);
         } else if (algorithm == "Quick Sort") {
             quickSort(arr, 0, arr.size() - 1);
         } else if (algorithm == "Heap Sort") {
@@ -511,7 +511,7 @@ void raceSortingAlgorithms3() {
 int main() {
     srand(time(0)); // Semilla para números aleatorios
 
-    cout << "Nuestro menu principal va a ser:" << endl;
+    cout << "Menu principal" << endl;
     cout << "1.- Cola de espera" << endl;
     cout << "2.- Trazabilidad de objetos" << endl;
     cout << "3.- Eventos de cada escenario" << endl;
